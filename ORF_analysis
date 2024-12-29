@@ -1,0 +1,127 @@
+import pandas as pd
+import warnings
+import os
+from tqdm import tqdm
+
+# Ignore FutureWarning
+warnings.filterwarnings("ignore", category=FutureWarning)
+
+# Define global variables and paths
+classification_file_path = './data/classification.txt'
+connections_file_path = './data/connections.txt'
+synapses_file_path = './data/synapses.txt'
+neuron_types = ['LC11']
+output_dir = './results/Neuron_Paths/'
+
+# Create output directory if it does not exist
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+# Read the data
+classification = pd.read_csv(classification_file_path)
+connections = pd.read_csv(connections_file_path)
+synapses = pd.read_csv(synapses_file_path)
+
+# Get the IDs of right-side L2 neurons
+L2_right_ids = classification[(classification['cell_type'] == 'L2') & (classification['side'] == 'right')]['root_id'].tolist()
+
+# Set of allowed cell types
+allowed_cell_types = {'Pm','LPi','T2', 'T3', 'T4', 'T5', 'Tm', 'Mi', 'Li', 'L2', 'L3', 'L5', 'DM', 'Y','LC','LM'}
+
+# DFS to find paths and compute weights
+def dfs(neuron_id, visited, connections, current_path, all_paths, current_weight, target_ids):
+    if neuron_id in visited or len(current_path) >= 5:
+        return
+    visited.add(neuron_id)
+    current_path.append(neuron_id)
+
+    upstream_neurons = connections[connections['post_root_id'] == neuron_id]
+
+    for _, row in upstream_neurons.iterrows():
+        pre_id = row['pre_root_id']
+        syn_count = row['syn_count']
+        nt_type = row['nt_type']
+
+        # Get the cell_type of the upstream neuron
+        pre_cell_type = classification.loc[classification['root_id'] == pre_id, 'cell_type']
+        
+        if pre_cell_type.empty:
+            continue
+        
+        # Check if the upstream neuron meets the criteria
+        pre_cell_type_value = pre_cell_type.values[0]  # Get the first value
+        
+        if not isinstance(pre_cell_type_value, str) or not any(allowed in pre_cell_type_value for allowed in allowed_cell_types):
+            continue  # Skip neurons that do not meet the criteria
+        
+        # Filter synapse types
+        if nt_type == 'GABA' or nt_type == 'GLUT':
+            syn_count = -abs(syn_count)
+        elif nt_type == 'ACH':
+            syn_count = abs(syn_count)
+        else:
+            continue
+        
+        # Get the output synapses of the upstream neuron
+        output_synapses = synapses.loc[synapses['root_id'] == pre_id, 'output synapses']
+        if not output_synapses.empty:
+            output_synapses = output_synapses.values[0]
+            weight = float(syn_count) / output_synapses
+            if abs(weight) < 0.01 and syn_count < 5:
+                continue
+            # Update the current weight
+            new_weight = current_weight * weight
+            
+            # Recursively search upstream neurons
+            dfs(pre_id, visited, connections, current_path, all_paths, new_weight, target_ids)
+
+    # If the current neuron is a target neuron (L2 or L2), save the path and weight
+    if neuron_id in target_ids:
+        all_paths.append((list(current_path), current_weight))
+    
+    # Backtrack
+    current_path.pop()
+    visited.remove(neuron_id)
+
+# Process each neuron type
+for neuron_type in neuron_types:
+    # Set file path
+    file_path = f'./data/Object_Neuron/{neuron_type}.txt'
+
+    # Read neuron ID list
+    with open(file_path, 'r') as f:
+        content = f.read()
+    neuron_ids = [int(item.strip()) for item in content.split(',')]
+
+    # Initialize L2 and L2 weight dictionary
+    L2_weights = {L2_id: 0 for L2_id in L2_right_ids}
+    neuron_type_output_dir = os.path.join(output_dir, f'{neuron_type}')
+    L2_output_dir = os.path.join(neuron_type_output_dir, 'L2')
+
+    # Create directories to save L2 weights
+    if not os.path.exists(L2_output_dir):
+        os.makedirs(L2_output_dir)
+
+    # Perform DFS for each neuron
+    for neuron_id in tqdm(neuron_ids, desc=f"Processing {neuron_type} Neurons"):
+        visited = set()
+        current_path = []
+        all_paths = []
+
+        # Start DFS to find paths to L2 neurons
+        dfs(neuron_id, visited, connections, current_path, all_paths, 1, target_ids=L2_right_ids)
+
+        # Update the weight sum for each L2 neuron
+        for path, weight in all_paths:
+            target_neuron_id = path[-1]  # Get the neuron ID of the path's endpoint
+            if target_neuron_id in L2_right_ids:
+                L2_weights[target_neuron_id] += weight
+
+        # Save the L2 weights to a file
+        L2_output_file_path = os.path.join(L2_output_dir, f'{neuron_id}.txt')
+        with open(L2_output_file_path, 'w') as f:
+            for L2_id, total_weight in L2_weights.items():
+                f.write(f'{L2_id}: {total_weight}\n')
+
+        # Reset the weight dictionary for the next iteration
+        L2_weights = {L2_id: 0 for L2_id in L2_right_ids}

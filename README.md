@@ -5,10 +5,19 @@
 This project focuses on analyzing neuronal connections and calculating the weights between different types of neurons. The two primary notebooks in this repository, **`DRF_analysis.ipynb`** and **`ORF_analysis.ipynb`**, provide distinct analysis and calculation pipelines for analyzing the synaptic weights and patterns in neurons.
 
 1. **`DRF_analysis.ipynb`**  
-   This notebook is designed for performing the Depth-First Search (DFS) analysis on the neuron connections. It identifies and calculates the synaptic weights between different neurons, primarily focusing on the relationship between L2 neurons and LC11 neurons. The resulting data is stored in individual files, one for each LC11 neuron, detailing the total weights for L2 neurons it connects to.
+   This notebook performs **Depth-First Search (DFS)** analysis on neuron connections, focusing on the **Direction Receptive Field (DRF)**. It calculates synaptic weights between neurons, specifically examining the relationship between L2 neurons and LC11 neurons. The resulting data is saved in individual files for each LC11 neuron, detailing the total weights for L2 neurons connected to it.
 
 2. **`ORF_analysis.ipynb`**  
-   This notebook provides an alternate analysis pipeline, which may involve a different method for calculating or visualizing the synaptic relationships, possibly focusing on the orientation or receptor functionalities (ORF). It complements the DRF analysis by providing additional insights into the synaptic activity of neurons.
+   This notebook analyzes the **Object Receptive Field (ORF)**, providing insights into the synaptic relationships of neurons in response to objects. It complements the DRF analysis by exploring how neurons respond to objects in their receptive field.
+
+3. **`T_ORF.ipynb`**  
+   This notebook focuses on **columnar neurons'** response to objects, specifically the **Object Receptive Field (T_ORF)**. It visualizes the response patterns of columnar neurons, drawing their receptive fields based on synaptic activity and connections.
+
+4. **`LC_Neuron_module.ipynb`**  
+   This notebook simulates the response of neurons to objects of varying sizes. It models how neurons, react to stimuli based on the size of objects in their receptive fields.
+
+5. **`LC_Neuron_module_looming.ipynb`**  
+   This notebook explores the **Looming Response** of neurons to moving objects. It focuses on how neurons' synaptic connections change when objects move toward them, simulating the response to different movement patterns.
 
 Both notebooks depend on the same input data files and will generate similar outputs, with each notebook focusing on a specific aspect of the neural connection analysis.
 

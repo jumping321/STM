@@ -101,8 +101,6 @@ To run the notebooks in this project, you will need to install the following Pyt
 - **scipy**: For scientific and statistical computations.
 - **warnings**: For handling warnings and suppressing future warnings during execution.
 
-You can install all the required packages by running the following command:
-
 
 ### Key Sections Explained:
 

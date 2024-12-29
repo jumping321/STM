@@ -89,6 +89,19 @@ your_project_directory/
 ├── DRF_analysis.ipynb
 ├── ORF_analysis.ipynb
 └── README.md
+```
+## Requirements
+
+To run the notebooks in this project, you will need to install the following Python packages:
+
+- **pandas**: For data manipulation and analysis.
+- **numpy**: For numerical operations and array handling.
+- **tqdm**: For displaying progress bars during iterations.
+- **matplotlib**: For creating visualizations and plots.
+- **scipy**: For scientific and statistical computations.
+- **warnings**: For handling warnings and suppressing future warnings during execution.
+
+You can install all the required packages by running the following command:
 
 
 ### Key Sections Explained:

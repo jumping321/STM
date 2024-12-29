@@ -9,6 +9,18 @@ This project focuses on analyzing neuronal connections and calculating the weigh
 
 2. **`ORF_analysis.ipynb`**  
    This notebook analyzes the **Object Receptive Field (ORF)**, providing insights into the synaptic relationships of neurons in response to objects. It complements the DRF analysis by exploring how neurons respond to objects in their receptive field.
+<<<<<<< HEAD
+=======
+
+3. **`T_ORF.ipynb`**  
+   This notebook focuses on **columnar neurons'** response to objects, specifically the **Object Receptive Field (T_ORF)**. It visualizes the response patterns of columnar neurons, drawing their receptive fields based on synaptic activity and connections.
+
+4. **`LC_Neuron_module.ipynb`**  
+   This notebook simulates the response of neurons to objects of varying sizes. It models how neurons, react to stimuli based on the size of objects in their receptive fields.
+
+5. **`LC_Neuron_module_looming.ipynb`**  
+   This notebook explores the **Looming Response** of neurons to moving objects. It focuses on how neurons' synaptic connections change when objects move toward them, simulating the response to different movement patterns.
+>>>>>>> 5049192ee976ece2f8248710983623efb6f17490
 
 3. **`T_ORF.ipynb`**  
    This notebook focuses on **columnar neurons'** response to objects, specifically the **Object Receptive Field (T_ORF)**. It visualizes the response patterns of columnar neurons, drawing their receptive fields based on synaptic activity and connections.

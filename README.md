@@ -101,14 +101,5 @@ To run the notebooks in this project, you will need to install the following Pyt
 - **scipy**: For scientific and statistical computations.
 - **warnings**: For handling warnings and suppressing future warnings during execution.
 
-
-### Key Sections Explained:
-
-1. **Introduction**: Gives an overview of the project and the purpose of the notebooks.
-2. **File Structure**: Describes the folder and file organization, including required input and output files.
-3. **Requirements**: Lists the Python libraries necessary for running the notebooks and installation instructions.
-4. **Usage**: Provides step-by-step instructions for running the project and obtaining the results.
-5. **License**: Mentions that the project is licensed under the MIT License (if applicable).
-
 This README should now serve as a comprehensive guide for setting up and running the project. Let me know if you need any modifications!
 
